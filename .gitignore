@@ -1,2 +1,7 @@
+config/.DS_Store
+config/iterm2/AppSupport/
+config/ranger/
+config/mpv/
+config/configstore/
 config/spotify-tui/
 config/github_autopilot
