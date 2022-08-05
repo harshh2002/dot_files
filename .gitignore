@@ -5,4 +5,4 @@ config/mpv/
 config/nvim/autoload/
 config/configstore/
 config/spotify-tui/
-config/github-autopilot/
+config/github-copilot/
