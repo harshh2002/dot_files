@@ -5,7 +5,6 @@ tap "homebrew/services"
 tap "iamchokerman/ani-cli"
 tap "italomandara/cxpatcher"
 tap "koekeishiya/formulae"
-tap "microsoft/mssql-release"
 tap "mongodb/brew"
 tap "nextfire/tap"
 tap "stripe/stripe-cli"
@@ -289,10 +288,6 @@ brew "azure/functions/azure-functions-core-tools@4"
 brew "hashicorp/tap/terraform"
 # A cli to browse and watch anime. This tool scrapes the site gogoanime.
 brew "iamchokerman/ani-cli/ani-cli"
-# ODBC Driver for Microsoft(R) SQL Server(R)
-brew "microsoft/mssql-release/msodbcsql18"
-# Sqlcmd and Bcp for Microsoft(R) SQL Server(R)
-brew "microsoft/mssql-release/mssql-tools18"
 # High-performance, schema-free, document-oriented database
 brew "mongodb/brew/mongodb-community"
 # Discord Rich Presence Client for the macOS Apple Music app and iTunes
