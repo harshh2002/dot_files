@@ -1,0 +1,67 @@
+# Chezmoi ignore patterns
+# Files and directories that should not be tracked by chezmoi
+#
+# NOTE: Some sensitive files listed below can be encrypted and tracked instead of ignored.
+# To encrypt them, remove the pattern from this file and use:
+#   ./scripts/chezmoi_encrypt_secrets.sh
+# Then add them with encryption enabled.
+
+# Sensitive configuration files
+# ==============================
+# 
+# IMPORTANT: Files listed below are IGNORED by default.
+# If you want to BACKUP these files (encrypted), you must:
+#   1. Remove the pattern from this file
+#   2. Run: ./scripts/chezmoi_encrypt_secrets.sh
+#   3. Select option 2 or 4 to encrypt the file
+#
+# See BACKUP_GUIDE.md for complete instructions.
+
+# Always ignore (too sensitive or auto-generated):
+**/configstore/**          # Contains API keys and tokens
+**/github-copilot/**       # Contains GitHub tokens
+**/firebase/**             # Contains Firebase credentials
+
+# Can be encrypted if you want to back them up:
+# Comment out (or remove) the lines below if you want to encrypt these files
+# **/.ssh/id_*               # SSH private keys (commented = can encrypt)
+# **/.ssh/*_rsa              # SSH RSA keys (commented = can encrypt)
+# **/.ssh/*_ed25519          # SSH Ed25519 keys (commented = can encrypt)
+# **/.aws/credentials        # AWS credentials (commented = can encrypt)
+# **/.gcloud/**              # GCloud configs (commented = can encrypt)
+
+# Cache and temporary files
+**/.DS_Store
+**/cache/**
+**/tmp/**
+**/*.swp
+**/*.swo
+**/*~
+**/.vim/autoload/**
+
+# Large binary files
+**/*.hprof
+**/*.log
+**/*.sqlite
+**/*.db
+
+# OS-specific files
+**/Library/**
+**/Applications/**
+
+# Build artifacts
+**/node_modules/**
+**/.venv/**
+**/__pycache__/**
+
+# IDE and editor files
+**/.idea/**
+**/.vscode/**
+**/*.code-workspace
+
+# Git files (already tracked by git)
+**/.git/**
+
+# Homebrew bundle lock
+**/Brewfile.lock.json
+

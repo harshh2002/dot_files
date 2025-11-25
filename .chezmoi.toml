@@ -1,0 +1,16 @@
+# Chezmoi configuration file
+# This repository serves as the source directory for chezmoi
+
+[data]
+    # Repository directory (this repo)
+    repo_dir = "{{ .chezmoi.sourceDir }}"
+
+# Source directory is set via CHEZMOI_SOURCE_DIR environment variable
+# or via --source flag in scripts
+
+
+encryption = "age"
+
+[age]
+    identity = "~/.config/age/keys.txt"
+    recipient = "age12cemw9vk89cte5mzfndc3d3ancw09nz77yjaek84fnge2xjvtyhqgt6qdw"

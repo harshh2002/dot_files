@@ -7,6 +7,10 @@ fi
 export PATH="$HOME/.cargo/bin:$PATH"
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+export PATH="/Users/zynixindia/.local/bin:/Users/harsh/Library/Python/3.10/bin:$PATH"
+
+eval "$(zoxide init zsh)"
+# . /path/to/z.sh
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -99,17 +103,22 @@ source $ZSH/oh-my-zsh.sh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 #
-# Example aliases
+# aliases
 alias zshrc="nvim ~/.zshrc"
 alias ist="brew install"
+alias ust="brew uninstall"
+alias python="python3"
+alias tf="terraform"
+alias sv="source ./.venv/bin/activate"
+alias k="kubectl"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 source ~/powerlevel10k/powerlevel10k.zsh-theme
 
-bindkey -s '^l' 'clear^M'
+#bindkey -s '^l' 'clear^M'
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.config/powerlevel10k/.p10k.zsh ]] || source ~/.config/powerlevel10k/.p10k.zsh
 # Terminal Prompt
-# export PS1="💻 %1d $ "
+export PS1="💻 %1d $ "
 
 # Python3 path include
 export PATH="/usr/local/opt/python/libexec/bin:$PATH"
@@ -173,3 +182,73 @@ export FZF_DEFAULT_OPTS="
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+alias pip=pip3
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /opt/homebrew/bin/terraform terraform
+
+eval "$(rbenv init - zsh)"
+
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/harsh/miniforge3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/harsh/miniforge3/etc/profile.d/conda.sh" ]; then
+        . "/Users/harsh/miniforge3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/harsh/miniforge3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+
+# RUBY 
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
+export LDFLAGS="-L/opt/homebrew/opt/readline/lib:$LDFLAGS"
+export CPPFLAGS="-I/opt/homebrew/opt/readline/include:$CPPFLAGS"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/readline/lib/pkgconfig:$PKG_CONFIG_PATH"
+export optflags="-Wno-error=implicit-function-declaration"
+export LDFLAGS="-L/opt/homebrew/opt/libffi/lib:$LDFLAGS"
+export CPPFLAGS="-I/opt/homebrew/opt/libffi/include:$CPPFLAGS"
+export PKG_CONFIG_PATH="/opt/homebrew/opt/libffi/lib/pkgconfig:$PKG_CONFIG_PATH"
+
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
+
+
+# Fix NSCFConstantString initialize error
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
+
+# Created by `pipx` on 2024-06-05 11:03:19
+export PATH="$PATH:/Users/zynixindia/.local/bin"
+
+test -e /Users/zynixindia/.iterm2_shell_integration.zsh && source /Users/zynixindia/.iterm2_shell_integration.zsh || true
+
+autoload -Uz compinit
+compinit
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+source <(fzf --zsh)
+export PATH="/opt/homebrew/opt/postgresql@17/bin:$PATH"
+
+eval "$(direnv hook zsh)"
+
+# bun completions
+[ -s "/Users/zynixindia/.bun/_bun" ] && source "/Users/zynixindia/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
