@@ -1,15 +1,15 @@
 # Chezmoi configuration file
 # This repository serves as the source directory for chezmoi
 
+# Encryption must be at the top level, before any section headers
+encryption = "age"
+
 [data]
     # Repository directory (this repo)
     repo_dir = "{{ .chezmoi.sourceDir }}"
 
 # Source directory is set via CHEZMOI_SOURCE_DIR environment variable
 # or via --source flag in scripts
-
-
-encryption = "age"
 
 [age]
     identity = "~/.config/age/keys.txt"

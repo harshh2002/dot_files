@@ -125,12 +125,35 @@ if [[ "$USE_AGE" == true ]]; then
         echo "[chezmoi] Updated encryption configuration in .chezmoi.toml"
     else
         # Add new encryption configuration (correct format)
-        echo "" >> "$CHEZMOI_CONFIG"
-        echo "encryption = \"age\"" >> "$CHEZMOI_CONFIG"
-        echo "" >> "$CHEZMOI_CONFIG"
-        echo "[age]" >> "$CHEZMOI_CONFIG"
-        echo "    identity = \"~/.config/age/keys.txt\"" >> "$CHEZMOI_CONFIG"
-        echo "    recipient = \"${AGE_PUBLIC_KEY}\"" >> "$CHEZMOI_CONFIG"
+        # Encryption must be at the top level, before any section headers
+        # Create a temporary file with encryption config at the top
+        TEMP_CONFIG=$(mktemp)
+        
+        # Add encryption config at the top
+        echo "# Encryption configuration (must be at top level)" >> "$TEMP_CONFIG"
+        echo "encryption = \"age\"" >> "$TEMP_CONFIG"
+        echo "" >> "$TEMP_CONFIG"
+        echo "[age]" >> "$TEMP_CONFIG"
+        echo "    identity = \"~/.config/age/keys.txt\"" >> "$TEMP_CONFIG"
+        echo "    recipient = \"${AGE_PUBLIC_KEY}\"" >> "$TEMP_CONFIG"
+        echo "" >> "$TEMP_CONFIG"
+        
+        # Append existing config (if any), skipping encryption-related lines
+        if [[ -f "$CHEZMOI_CONFIG" ]]; then
+            # Read existing config and filter out encryption lines
+            while IFS= read -r line; do
+                # Skip encryption config lines (we already added them)
+                if [[ "$line" =~ ^encryption ]] || \
+                   [[ "$line" =~ ^\[age\] ]] || \
+                   [[ "$line" =~ ^[[:space:]]*(identity|recipient)[[:space:]]*= ]]; then
+                    continue
+                fi
+                echo "$line" >> "$TEMP_CONFIG"
+            done < "$CHEZMOI_CONFIG"
+        fi
+        
+        # Replace original config with new one
+        mv "$TEMP_CONFIG" "$CHEZMOI_CONFIG"
         echo "[chezmoi] Added encryption configuration to .chezmoi.toml"
     fi
     echo "[chezmoi] Chezmoi configured to use age encryption."

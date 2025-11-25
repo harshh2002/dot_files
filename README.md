@@ -6,7 +6,10 @@ Packages, configs and rice of my m1 macbook pro 2020
 
 ## Quick Start
 
-**New to this repository?** See [BACKUP_GUIDE.md](BACKUP_GUIDE.md) for a complete step-by-step guide from setup to backup.
+**New to this repository?**
+
+- **Setting up on a new machine?** See [RESTORATION_GUIDE.md](RESTORATION_GUIDE.md) for complete restoration instructions.
+- **Backing up your dotfiles?** See [BACKUP_GUIDE.md](BACKUP_GUIDE.md) for a complete step-by-step guide from setup to backup.
 
 ## Chezmoi Setup
 
@@ -99,6 +102,10 @@ To add additional configurations, use the backup script option 3:
 **Note**: Sensitive configurations (API keys, credentials) are automatically excluded via `.chezmoiignore`. See [BACKUP_GUIDE.md](BACKUP_GUIDE.md) for instructions on encrypting and backing up sensitive files.
 
 ## Migration to New Device
+
+**📖 For complete restoration instructions, see [RESTORATION_GUIDE.md](RESTORATION_GUIDE.md)**
+
+This section provides a quick overview. The restoration guide includes detailed steps, troubleshooting, and verification procedures.
 
 ### Prerequisites
 

@@ -20,6 +20,7 @@ This guide walks you through the complete process of backing up all your dotfile
 ```
 
 This will:
+
 - Initialize chezmoi if not already done
 - Apply existing dotfiles from the repository to your home directory
 
@@ -30,12 +31,14 @@ This will:
 ```
 
 This will:
+
 - Generate an age encryption key (if not exists)
 - Configure chezmoi to use age encryption
 - Test encryption
 - **IMPORTANT**: Note your age public key and backup location
 
 **Critical**: Backup your age private key immediately:
+
 - Location: `~/.config/age/keys.txt`
 - Store in: Password manager (1Password, Bitwarden), encrypted USB, or secure cloud storage
 - **Never commit the private key to git!**
@@ -47,11 +50,13 @@ This will:
 Open `.chezmoiignore` and review the patterns. Files that should be **encrypted** instead of ignored:
 
 **Currently ignored but should be encrypted:**
+
 - `**/.ssh/id_*` - SSH private keys (if you want to back them up)
 - `**/.aws/credentials` - AWS credentials (if you want to back them up)
 - `**/.gcloud/**` - GCloud configs (if non-sensitive parts exist)
 
 **Should remain ignored (too sensitive or auto-generated):**
+
 - `**/configstore/**` - Usually contains API keys
 - `**/github-copilot/**` - Contains tokens
 - `**/firebase/**` - Contains credentials
@@ -70,6 +75,7 @@ Remove patterns for files you want to encrypt:
 ```
 
 **Example**: If you want to encrypt SSH keys, remove this line:
+
 ```
 **/.ssh/id_*
 ```
@@ -83,6 +89,7 @@ Remove patterns for files you want to encrypt:
 ```
 
 Choose option **4** (Encrypt all recommended files interactively) to:
+
 - See which files should be encrypted
 - Choose which ones to encrypt
 - Automatically encrypt and add them to the repository
@@ -110,6 +117,7 @@ chezmoi add --encrypt --source="${HOME}/dot_files" ~/.ssh/id_rsa
 ```
 
 Choose option **1** (All tracked files) to:
+
 - Re-add all existing tracked files
 - Update any that have changed
 
@@ -120,10 +128,12 @@ Choose option **1** (All tracked files) to:
 ```
 
 Choose option **3** (Add specific file/directory) to add:
+
 - New config files you've created
 - Updated configurations
 
 **Examples:**
+
 ```bash
 # Add a new config
 ./scripts/chezmoi_backup.sh
@@ -153,6 +163,7 @@ find . -name "*.age" -o -name "*.encrypted" 2>/dev/null
 #### 5.2 Verify Encrypted Files
 
 Encrypted files will have `.age` extension in the repository:
+
 - `private_dot_ssh_id_rsa.age` (encrypted SSH key)
 - `private_dot_aws_credentials.age` (encrypted AWS creds)
 
@@ -171,6 +182,7 @@ git status
 ```
 
 **Verify:**
+
 - ✅ Encrypted files (`.age` extension) are included
 - ✅ Regular dotfiles are included
 - ❌ Private keys (`~/.config/age/keys.txt`) are NOT included
@@ -206,6 +218,7 @@ cd ~/dot_files
 #### 7.2 Restore Encrypted Files
 
 When prompted:
+
 1. Restore your age key: Copy `~/.config/age/keys.txt` from backup
 2. Apply dotfiles: `chezmoi apply --source="${HOME}/dot_files"`
 3. Verify: Check that encrypted files are decrypted correctly
@@ -242,17 +255,20 @@ After initial setup, use this simplified workflow:
 ## Complete Checklist
 
 ### Initial Setup
+
 - [ ] Run `./scripts/chezmoi_init.sh`
 - [ ] Run `./scripts/chezmoi_setup_encryption.sh`
 - [ ] **Backup age private key** (`~/.config/age/keys.txt`)
 - [ ] Store key in password manager/secure location
 
 ### Configuration
+
 - [ ] Review `.chezmoiignore`
 - [ ] Remove patterns for files you want to encrypt
 - [ ] Update `.chezmoiignore` with comments
 
 ### First Backup
+
 - [ ] Run `./scripts/chezmoi_encrypt_secrets.sh` (encrypt sensitive files)
 - [ ] Run `./scripts/chezmoi_backup.sh` (add regular files)
 - [ ] Review changes with `chezmoi diff`
@@ -260,6 +276,7 @@ After initial setup, use this simplified workflow:
 - [ ] Commit and push
 
 ### Verification
+
 - [ ] Test restore on another machine (optional)
 - [ ] Verify encrypted files decrypt correctly
 - [ ] Verify all configs are applied
@@ -305,22 +322,26 @@ chezmoi decrypt <encrypted-file>
 ## Security Best Practices
 
 1. **Never commit private keys**:
+
    - Age private key: `~/.config/age/keys.txt`
    - SSH private keys (unless encrypted)
    - API keys in plain text
 
 2. **Always encrypt sensitive data**:
+
    - SSH keys
    - API credentials
    - Access tokens
    - Database passwords
 
 3. **Backup encryption keys separately**:
+
    - Use password manager
    - Store in secure location
    - Never in the repository
 
 4. **Regular key rotation**:
+
    - Rotate age keys periodically
    - Update encrypted files with new keys
 
@@ -349,4 +370,3 @@ chezmoi add --encrypt ~/.ssh/id_rsa
 chezmoi diff
 chezmoi apply
 ```
-
