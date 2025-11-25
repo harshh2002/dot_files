@@ -122,9 +122,9 @@ fi
 
 #bindkey -s '^l' 'clear^M'
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# Load powerlevel10k config if it exists
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 [[ ! -f ~/.config/powerlevel10k/.p10k.zsh ]] || source ~/.config/powerlevel10k/.p10k.zsh
-# Terminal Prompt
-export PS1="💻 %1d $ "
 
 # Python3 path include
 export PATH="/usr/local/opt/python/libexec/bin:$PATH"

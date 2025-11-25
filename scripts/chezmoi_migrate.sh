@@ -3,6 +3,47 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
+# Function to add private_config files to chezmoi tracking
+add_private_config_files() {
+    local repo_dir="$1"
+    local private_config_dir="${repo_dir}/private_config"
+    
+    if [[ ! -d "$private_config_dir" ]]; then
+        return 0
+    fi
+    
+    echo "[chezmoi] Adding private_config files to chezmoi tracking..."
+    
+    # Find all files in private_config
+    find "$private_config_dir" -type f | while IFS= read -r source_file; do
+        # Get relative path from private_config
+        rel_path="${source_file#${private_config_dir}/}"
+        target="${HOME}/.config/${rel_path}"
+        
+        # Create target directory if it doesn't exist
+        target_dir=$(dirname "$target")
+        if [[ ! -d "$target_dir" ]]; then
+            mkdir -p "$target_dir"
+        fi
+        
+        # Copy file to target location if it doesn't exist
+        if [[ ! -f "$target" ]]; then
+            cp "$source_file" "$target"
+            echo "[chezmoi] Created: $target"
+        fi
+        
+        # Add to chezmoi tracking
+        if chezmoi add --source="$repo_dir" "$target" 2>/dev/null; then
+            echo "[chezmoi] Tracked: $target"
+        else
+            # If add fails, try re-add (file might already be tracked)
+            chezmoi re-add --source="$repo_dir" "$target" 2>/dev/null || true
+        fi
+    done
+    
+    echo "[chezmoi] Finished adding private_config files."
+}
+
 echo "[chezmoi] Migration to New Device"
 echo "================================="
 echo ""
@@ -61,10 +102,14 @@ fi
 # Set source directory
 export CHEZMOI_SOURCE_DIR="${REPO_DIR}"
 
+# Add private_config files to chezmoi tracking
+echo ""
+add_private_config_files "${REPO_DIR}"
+
 # Apply dotfiles
 echo ""
 echo "[chezmoi] Applying dotfiles from: ${REPO_DIR}"
-chezmoi apply --source="${REPO_DIR}"
+chezmoi apply --force --source="${REPO_DIR}"
 
 if [[ $? -eq 0 ]]; then
     echo "[chezmoi] ✓ Dotfiles applied successfully"
@@ -97,7 +142,7 @@ if [[ "$ENCRYPTION_TYPE" != "none" ]]; then
         if [[ -f "$AGE_KEY_FILE" ]]; then
             echo "[chezmoi] ✓ Age key found at: ${AGE_KEY_FILE}"
             echo "[chezmoi] Attempting to apply encrypted files..."
-            chezmoi apply --source="${REPO_DIR}"
+            chezmoi apply --force --source="${REPO_DIR}"
             echo "[chezmoi] ✓ Encrypted files applied"
         else
             echo "[chezmoi] ✗ Age key not found at: ${AGE_KEY_FILE}"
@@ -108,7 +153,7 @@ if [[ "$ENCRYPTION_TYPE" != "none" ]]; then
             echo ""
             read -p "[chezmoi] Have you restored your age key? [y/N]: " key_restored
             if [[ "$key_restored" =~ ^[Yy]$ ]]; then
-                chezmoi apply --source="${REPO_DIR}"
+                chezmoi apply --force --source="${REPO_DIR}"
                 echo "[chezmoi] ✓ Encrypted files applied"
             else
                 echo "[chezmoi] Skipping encrypted files. Restore your key and run:"
@@ -119,7 +164,7 @@ if [[ "$ENCRYPTION_TYPE" != "none" ]]; then
         if gpg --list-secret-keys >/dev/null 2>&1; then
             echo "[chezmoi] ✓ GPG keys found"
             echo "[chezmoi] Attempting to apply encrypted files..."
-            chezmoi apply --source="${REPO_DIR}"
+            chezmoi apply --force --source="${REPO_DIR}"
             echo "[chezmoi] ✓ Encrypted files applied"
         else
             echo "[chezmoi] ✗ GPG keys not found"
@@ -129,7 +174,7 @@ if [[ "$ENCRYPTION_TYPE" != "none" ]]; then
             echo ""
             read -p "[chezmoi] Have you imported your GPG key? [y/N]: " key_imported
             if [[ "$key_imported" =~ ^[Yy]$ ]]; then
-                chezmoi apply --source="${REPO_DIR}"
+                chezmoi apply --force --source="${REPO_DIR}"
                 echo "[chezmoi] ✓ Encrypted files applied"
             else
                 echo "[chezmoi] Skipping encrypted files. Import your key and run:"
