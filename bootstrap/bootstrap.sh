@@ -29,6 +29,14 @@ fi
 echo "[bootstrap] Running brew bundle..."
 brew bundle --file="${BREWFILE}"
 
+# oh-my-zsh
+if [[ ! -d "${HOME}/.oh-my-zsh" ]]; then
+  echo "[bootstrap] Installing oh-my-zsh..."
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+else
+  echo "[bootstrap] oh-my-zsh already installed, skipping..."
+fi
+
 echo "[bootstrap] Ensuring chezmoi is installed..."
 if ! command -v chezmoi >/dev/null 2>&1; then
   brew install chezmoi
